@@ -26,6 +26,6 @@ export default defineConfig({
   schema: {
     types: schema.types,
   },
-  apiVersion: '2024-02-13',
+  apiVersion: '2023-08-01',
   useCdn: false
 })
