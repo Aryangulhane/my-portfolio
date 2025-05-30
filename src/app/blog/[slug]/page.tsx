@@ -24,7 +24,13 @@ async function getPost(slug: string) {
   return post
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+type Props = {
+  params: {
+    slug: string
+  }
+}
+
+export default async function BlogPost({ params }: Props) {
   const post = await getPost(params.slug)
   const imageUrl = post.mainImage ? urlForImage(post.mainImage)?.url() : null
 
