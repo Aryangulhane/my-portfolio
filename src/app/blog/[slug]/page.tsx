@@ -1,5 +1,4 @@
-import { client } from '@/sanity/lib/client'
-import { urlForImage } from '@/sanity/lib/image'
+import { client, urlForImage } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -27,7 +26,6 @@ async function getPost(slug: string) {
 
 export default async function BlogPost({ params }: PageProps) {
   const post = await getPost(params.slug)
-  const imageUrl = post.mainImage ? urlForImage(post.mainImage)?.url() : null
 
   return (
     <article className="container mx-auto px-4 py-8">
@@ -48,13 +46,14 @@ export default async function BlogPost({ params }: PageProps) {
           )}
         </div>
         
-        {imageUrl && (
-          <div className="relative w-full h-[400px] mb-8">
+        {post.mainImage && (
+          <div className="relative w-full h-96 mb-8">
             <Image
-              src={imageUrl}
-              alt={post.title || 'Blog post image'}
+              src={urlForImage(post.mainImage)?.url() || ''}
+              alt={post.title}
               fill
               className="object-cover rounded-lg"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
         )}

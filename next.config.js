@@ -6,9 +6,19 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
-        pathname: '/images/**',
+        port: '',
+        pathname: '/**',
       },
     ],
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@sanity/vision': false,
+      '@portabletext/editor': false,
+      '@portabletext/editor/plugins': false,
+    }
+    return config
   },
 };
 

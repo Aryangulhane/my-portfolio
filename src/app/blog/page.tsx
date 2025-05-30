@@ -1,5 +1,4 @@
-import { client } from '@/sanity/lib/client'
-import { urlForImage } from '../../sanity/lib/image'
+import { client, urlForImage } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 
