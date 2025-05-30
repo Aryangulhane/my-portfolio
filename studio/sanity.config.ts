@@ -12,14 +12,14 @@ import {schema} from './sanity/schemaTypes/index'
 export default defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
-  projectId: 'krdza9oy',
-  dataset: 'production',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   basePath: '/',
   plugins: [deskTool(), visionTool()],
   schema: {
     types: schema.types,
   },
-  apiVersion: '2024-05-30',
+  apiVersion: '2023-05-03',
   useCdn: false,
   perspective: 'published'
 })
