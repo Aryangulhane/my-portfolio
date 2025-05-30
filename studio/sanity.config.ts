@@ -17,7 +17,7 @@ console.log('Studio Dataset:', process.env.SANITY_STUDIO_DATASET)
 const projectId = 'krdza9oy'
 const dataset = 'production'
 
-export default defineConfig({
+const config = {
   name: 'default',
   title: 'My Portfolio Studio',
   projectId,
@@ -33,4 +33,9 @@ export default defineConfig({
     allowOrigins: ['https://aryanportfolio.sanity.studio', 'https://www.sanity.io'],
     allowCredentials: true
   }
-})
+}
+
+// Log the final configuration
+console.log('Sanity Studio Config:', config)
+
+export default defineConfig(config)
