@@ -9,22 +9,11 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schema} from './sanity/schemaTypes/index'
 
-// Try environment variables first, fallback to hardcoded values
-const projectId = 
-  process.env.SANITY_STUDIO_PROJECT_ID || 
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 
-  'krdza9oy'
-
-const dataset = 
-  process.env.SANITY_STUDIO_DATASET || 
-  process.env.NEXT_PUBLIC_SANITY_DATASET || 
-  'production'
-
-const config = defineConfig({
+export default defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
-  projectId,
-  dataset,
+  projectId: 'krdza9oy',
+  dataset: 'production',
   basePath: '/studio',
   plugins: [deskTool(), visionTool()],
   schema: {
@@ -33,5 +22,3 @@ const config = defineConfig({
   apiVersion: '2023-08-01',
   useCdn: false,
 })
-
-export default config
