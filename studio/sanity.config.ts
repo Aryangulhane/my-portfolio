@@ -9,11 +9,24 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schema} from './sanity/schemaTypes/index'
 
+// Check if we're in a browser environment (studio deployment)
+const isBrowser = typeof window !== 'undefined'
+
+// For studio deployment, always use hardcoded values
+// For Next.js development, try environment variables with fallbacks
+const projectId = isBrowser 
+  ? 'krdza9oy' 
+  : (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'krdza9oy')
+
+const dataset = isBrowser 
+  ? 'production' 
+  : (process.env.NEXT_PUBLIC_SANITY_DATASET || 'production')
+
 export default defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
-  projectId: 'krdza9oy',
-  dataset: 'production',
+  projectId,
+  dataset,
   basePath: '/studio',
   plugins: [deskTool(), visionTool()],
   schema: {
