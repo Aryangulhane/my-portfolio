@@ -22,11 +22,15 @@ export default defineConfig({
   title: 'My Portfolio Studio',
   projectId,
   dataset,
-  basePath: '/',
+  basePath: '/studio',
   plugins: [deskTool(), visionTool()],
   schema: {
     types: schema.types,
   },
   apiVersion: '2023-08-01',
-  useCdn: false
+  useCdn: false,
+  cors: {
+    allowOrigins: ['https://aryanportfolio.sanity.studio', 'https://www.sanity.io'],
+    allowCredentials: true
+  }
 })
