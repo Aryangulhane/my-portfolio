@@ -25,7 +25,8 @@ async function getPost(slug: string): Promise<Post | null> {
       "categories": categories[]->title
     }`
     
-    return await client.fetch(query, { slug })
+    const post = await client.fetch(query, { slug })
+    return post || null
   } catch (error) {
     console.error('Error fetching post:', error)
     return null
