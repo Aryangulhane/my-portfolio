@@ -2,6 +2,9 @@ import { client, urlForImage } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 
+// Add revalidation
+export const revalidate = 0
+
 async function getPosts() {
   try {
     const query = `*[_type == "post"] | order(publishedAt desc) {
