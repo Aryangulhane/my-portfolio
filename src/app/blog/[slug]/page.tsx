@@ -3,6 +3,7 @@ import { urlForImage } from '@/sanity/lib/image'
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import type { PageProps } from 'next'
 
 async function getPost(slug: string) {
   const query = `*[_type == "post" && slug.current == $slug][0] {
@@ -24,13 +25,7 @@ async function getPost(slug: string) {
   return post
 }
 
-type Props = {
-  params: {
-    slug: string
-  }
-}
-
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost({ params }: PageProps) {
   const post = await getPost(params.slug)
   const imageUrl = post.mainImage ? urlForImage(post.mainImage)?.url() : null
 
