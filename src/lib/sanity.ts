@@ -3,15 +3,16 @@ import imageUrlBuilder from '@sanity/image-url'
 import type { Image } from 'sanity'
 
 // Debug environment variables
-console.log('Project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
-console.log('Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET)
+console.log('Client Project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
+console.log('Client Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET)
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'krdza9oy'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+// Use hardcoded values as fallback
+const projectId = 'krdza9oy'
+const dataset = 'production'
 
 export const client = createClient({
-  projectId,
-  dataset,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || projectId,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || dataset,
   apiVersion: '2023-08-01',
   useCdn: false,
   token: process.env.SANITY_API_READ_TOKEN
@@ -24,5 +25,9 @@ export function urlForImage(source: Image) {
     return undefined
   }
   
+  return builder.image(source)
+}
+
+export function urlFor(source: any) {
   return builder.image(source)
 } 
