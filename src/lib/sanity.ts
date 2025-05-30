@@ -2,12 +2,20 @@ import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { Image } from 'sanity'
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-05-30'
+
 export const client = createClient({
-  projectId: 'krdza9oy',
-  dataset: 'production',
-  apiVersion: '2024-05-30',
-  useCdn: false,
-  perspective: 'published',
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: process.env.NODE_ENV === 'production',
+  token: process.env.SANITY_API_READ_TOKEN,
+  stega: {
+    enabled: process.env.NODE_ENV === 'development',
+    studioUrl: '/studio',
+  },
 })
 
 const builder = imageUrlBuilder(client)
@@ -17,5 +25,5 @@ export function urlForImage(source: Image) {
     return undefined
   }
   
-  return builder?.image(source)
+  return builder.image(source)
 } 

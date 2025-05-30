@@ -7,18 +7,18 @@
     "dev": "sanity dev",
     "start": "sanity start",
     "build": "sanity build",
-    "deploy": "sanity deploy"
+    "deploy": "sanity deploy",
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@sanity/vision": "^3.90.0",
     "sanity": "^3.90.0",
-    "sanity-plugin-dashboard-widget-vercel": "^1.0.1",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
     "@sanity/cli": "^3.90.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.4",
-    "tailwindcss": "^4.1.8"
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
   }
 }

@@ -12,9 +12,10 @@ import {schema} from './sanity/schemaTypes/index'
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 
 export default defineConfig({
+  name: 'default',
+  title: 'My Portfolio Studio',
   projectId: 'krdza9oy',
   dataset: 'production',
-  basePath: '/studio',
   plugins: [deskTool(), visionTool()],
   schema: {
     types: schema.types,
