@@ -2,22 +2,17 @@ import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { Image } from 'sanity'
 
-if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID')
-}
+// Debug environment variables
+console.log('Project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
+console.log('Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET)
 
-if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_DATASET')
-}
-
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-const apiVersion = '2024-02-13'
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'krdza9oy'
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 export const client = createClient({
   projectId,
   dataset,
-  apiVersion,
+  apiVersion: '2024-02-13',
   useCdn: false,
   token: process.env.SANITY_API_READ_TOKEN
 })

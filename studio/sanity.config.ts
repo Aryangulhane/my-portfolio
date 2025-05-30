@@ -9,25 +9,23 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schema} from './sanity/schemaTypes/index'
 
-if (!process.env.SANITY_STUDIO_PROJECT_ID) {
-  throw new Error('Missing environment variable: SANITY_STUDIO_PROJECT_ID')
-}
+// Debug environment variables
+console.log('Studio Project ID:', process.env.SANITY_STUDIO_PROJECT_ID)
+console.log('Studio Dataset:', process.env.SANITY_STUDIO_DATASET)
 
-if (!process.env.SANITY_STUDIO_DATASET) {
-  throw new Error('Missing environment variable: SANITY_STUDIO_DATASET')
-}
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'krdza9oy'
+const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
 export default defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID,
-  dataset: process.env.SANITY_STUDIO_DATASET,
+  projectId,
+  dataset,
   basePath: '/',
   plugins: [deskTool(), visionTool()],
   schema: {
     types: schema.types,
   },
   apiVersion: '2024-02-13',
-  useCdn: false,
-  perspective: 'published'
+  useCdn: false
 })
