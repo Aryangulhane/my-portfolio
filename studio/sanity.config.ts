@@ -9,15 +9,18 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schema} from './sanity/schemaTypes/index'
 
-// Debug environment variables
-console.log('Studio Project ID:', process.env.SANITY_STUDIO_PROJECT_ID)
-console.log('Studio Dataset:', process.env.SANITY_STUDIO_DATASET)
+// Try environment variables first, fallback to hardcoded values
+const projectId = 
+  process.env.SANITY_STUDIO_PROJECT_ID || 
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 
+  'krdza9oy'
 
-// Use hardcoded values as fallback
-const projectId = 'krdza9oy'
-const dataset = 'production'
+const dataset = 
+  process.env.SANITY_STUDIO_DATASET || 
+  process.env.NEXT_PUBLIC_SANITY_DATASET || 
+  'production'
 
-const config = {
+const config = defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
   projectId,
@@ -29,13 +32,6 @@ const config = {
   },
   apiVersion: '2023-08-01',
   useCdn: false,
-  cors: {
-    allowOrigins: ['https://aryanportfolio.sanity.studio', 'https://www.sanity.io'],
-    allowCredentials: true
-  }
-}
+})
 
-// Log the final configuration
-console.log('Sanity Studio Config:', config)
-
-export default defineConfig(config)
+export default config
