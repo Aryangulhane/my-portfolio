@@ -9,25 +9,25 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schema} from './sanity/schemaTypes/index'
 
-if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID')
+if (!process.env.SANITY_STUDIO_PROJECT_ID) {
+  throw new Error('Missing environment variable: SANITY_STUDIO_PROJECT_ID')
 }
 
-if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_DATASET')
+if (!process.env.SANITY_STUDIO_DATASET) {
+  throw new Error('Missing environment variable: SANITY_STUDIO_DATASET')
 }
 
 export default defineConfig({
   name: 'default',
   title: 'My Portfolio Studio',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID,
+  dataset: process.env.SANITY_STUDIO_DATASET,
   basePath: '/',
   plugins: [deskTool(), visionTool()],
   schema: {
     types: schema.types,
   },
-  apiVersion: '2023-05-03',
+  apiVersion: '2024-02-13',
   useCdn: false,
   perspective: 'published'
 })

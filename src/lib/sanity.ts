@@ -12,7 +12,7 @@ if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-const apiVersion = '2023-05-03'
+const apiVersion = '2024-02-13'
 
 export const client = createClient({
   projectId,
