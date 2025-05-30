@@ -162,7 +162,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    // Initialize theme from localStorage or default to dark
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme') as Theme['mode'];
       return themes[savedTheme] || themes.dark;
@@ -177,23 +176,42 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!themes[mode]) return;
     
     setIsAnimating(true);
+    
+    // Add transition overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'theme-transition-overlay';
+    document.body.appendChild(overlay);
+    
+    // Trigger reflow
+    overlay.offsetHeight;
+    
+    // Activate overlay
+    overlay.classList.add('active');
+    
     setTimeout(() => {
       setThemeState(themes[mode]);
       if (typeof window !== 'undefined') {
         localStorage.setItem('theme', mode);
       }
-      setIsAnimating(false);
-    }, 500);
+      
+      // Remove overlay after transition
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+          overlay.remove();
+          setIsAnimating(false);
+        }, 300);
+      }, 300);
+    }, 300);
   };
 
   useEffect(() => {
     if (!theme) return;
 
-    // Apply theme to document with smooth transition
-    document.documentElement.style.transition = 'all 0.5s ease-in-out';
+    // Apply theme to document
     document.documentElement.setAttribute('data-theme', theme.mode);
     
-    // Apply theme colors with smooth transitions
+    // Apply theme colors
     const applyThemeColor = (property: string, value: string) => {
       document.documentElement.style.setProperty(property, value);
       if (value.startsWith('#')) {
@@ -214,20 +232,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.style.setProperty('--shadow', theme.effects.shadow);
     document.documentElement.style.setProperty('--border', theme.effects.border);
 
-    // Apply background color to body with smooth transition
-    document.body.style.transition = 'background-color 0.5s ease-in-out';
+    // Apply background color to body
     document.body.style.backgroundColor = theme.background;
-
-    // Force a reflow to ensure styles are applied
-    document.body.offsetHeight;
-
-    // Cleanup transition after animation
-    const cleanup = setTimeout(() => {
-      document.documentElement.style.transition = '';
-      document.body.style.transition = '';
-    }, 500);
-
-    return () => clearTimeout(cleanup);
   }, [theme]);
 
   return (
