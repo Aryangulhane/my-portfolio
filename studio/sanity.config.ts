@@ -13,8 +13,9 @@ import {schema} from './sanity/schemaTypes/index'
 console.log('Studio Project ID:', process.env.SANITY_STUDIO_PROJECT_ID)
 console.log('Studio Dataset:', process.env.SANITY_STUDIO_DATASET)
 
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'krdza9oy'
-const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
+// Use hardcoded values as fallback
+const projectId = 'krdza9oy'
+const dataset = 'production'
 
 export default defineConfig({
   name: 'default',
