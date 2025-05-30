@@ -11,11 +11,7 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: process.env.NODE_ENV === 'production',
-  token: process.env.SANITY_API_READ_TOKEN,
-  stega: {
-    enabled: process.env.NODE_ENV === 'development',
-    studioUrl: '/studio',
-  },
+  token: process.env.SANITY_API_READ_TOKEN
 })
 
 const builder = imageUrlBuilder(client)
