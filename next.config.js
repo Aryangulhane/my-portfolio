@@ -15,8 +15,6 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@sanity/vision': false,
-      '@portabletext/editor': false,
-      '@portabletext/editor/plugins': false,
     }
     return config
   },
