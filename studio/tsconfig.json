@@ -7,13 +7,13 @@
         "./*"
       ]
     }
+    // No "types" or "typeRoots" referencing "next"
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".sanity/**/*.ts",
-    ".sanity/**/*.tsx",
-    ".next/types/**/*.ts"
+    ".sanity/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
