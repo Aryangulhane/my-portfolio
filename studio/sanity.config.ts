@@ -1,12 +1,10 @@
-import { defineConfig } from 'sanity/config'
+import { defineConfig } from 'sanity'
 import { deskTool } from 'sanity/desk'
 import { visionTool } from '@sanity/vision'
 import { schema } from './sanity/schemaTypes/index'
 
 export default defineConfig({
-  name: 'default',
-  title: 'My Portfolio Studio',
-  
+  basePath: '/studio',
   projectId: 'krdza9oy',
   dataset: 'production',
   

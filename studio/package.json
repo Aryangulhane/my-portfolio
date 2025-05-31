@@ -2,10 +2,10 @@
   "name": "studio",
   "private": true,
   "version": "1.0.0",
-  "main": "package.json",
+  "main": "sanity.config.ts",
   "scripts": {
-    "dev": "sanity dev",
-    "start": "sanity start",
+    "dev": "sanity dev --port 3333",
+    "start": "sanity start --port 3333",
     "build": "sanity build",
     "deploy": "sanity deploy"
   },

@@ -1,4 +1,4 @@
-declare module 'sanity/config' {
+declare module 'sanity' {
   export function defineConfig(config: any): any
 }
 
