@@ -1,7 +1,8 @@
-import type {StructureResolver} from 'sanity/structure'
-
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
-export const structure: StructureResolver = (S) =>
+/**
+ * Custom desk structure for Sanity Studio
+ */
+export const structure = (S: any) =>
   S.list()
     .title('Blog')
     .items([
@@ -10,6 +11,6 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('author').title('Authors'),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() && !['post', 'category', 'author'].includes(item.getId()!),
+        (item: any) => item.getId() && !['post', 'category', 'author'].includes(item.getId()),
       ),
     ])

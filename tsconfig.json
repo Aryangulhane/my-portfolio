@@ -22,7 +22,7 @@
       "@/*": ["./src/*"],
       "@/studio/*": ["./studio/*"]
     },
-    "types": ["node", "next", "sanity"]
+    "types": ["node", "next"]
   },
   "include": [
     "next-env.d.ts",
