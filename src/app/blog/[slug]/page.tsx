@@ -1,4 +1,4 @@
-import { client, urlForImage } from '@/lib/sanity'
+import { client, urlFor } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -68,7 +68,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
         {post.mainImage && (
           <div className="relative w-full h-96 mb-8">
             <Image
-              src={urlForImage(post.mainImage)?.url() || ''}
+              src={urlFor(post.mainImage)?.url() || ''}
               alt={post.title}
               fill
               className="object-cover rounded-lg"
