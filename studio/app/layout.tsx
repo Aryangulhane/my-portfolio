@@ -25,7 +25,7 @@ export default function RootLayout({
         <script
           src="https://core.sanity-cdn.com/bridge.js"
           async
-          defer
+          crossOrigin="anonymous"
         />
       </head>
       <body className={inter.className}>{children}</body>
