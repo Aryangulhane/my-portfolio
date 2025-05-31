@@ -61,8 +61,7 @@ export default function RootLayout({
           onLoad={() => {
             if (window.sanityBridge) {
               window.sanityBridge.init({
-                targetOrigin: SANITY_ORIGIN,
-                studioOrigin: STUDIO_ORIGIN
+                targetOrigin: SANITY_ORIGIN
               })
             }
           }}

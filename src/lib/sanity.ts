@@ -51,6 +51,7 @@ declare global {
     sanityBridge?: {
       init: (config: { targetOrigin: string }) => void
       send: (message: any) => void
+      receive: (callback: (message: any) => void) => void
     }
   }
 }
