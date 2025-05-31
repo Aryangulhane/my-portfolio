@@ -9,17 +9,9 @@ console.log('Environment Variables:', {
   hasToken: !!process.env.SANITY_API_TOKEN,
 })
 
-// Validate environment variables
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-
-if (!projectId) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID')
-}
-
-if (!dataset) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_DATASET')
-}
+// Validate environment variables with fallbacks
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'krdza9oy'
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 // Create the config
 const config = {

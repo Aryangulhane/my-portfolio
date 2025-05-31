@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 const inter = Inter({ subsets: ['latin'] })
 
 const SANITY_ORIGIN = 'https://www.sanity.io'
+const STUDIO_ORIGIN = 'https://aryanportfolio.sanity.studio'
 
 export const metadata: Metadata = {
   title: 'Sanity Studio',
@@ -47,23 +48,23 @@ export default function RootLayout({
           href="https://cdn.sanity.io"
           crossOrigin="anonymous"
         />
+        <link
+          rel="preload"
+          href="https://core.sanity-cdn.com/bridge.js"
+          as="script"
+          crossOrigin="anonymous"
+        />
         <script
           src="https://core.sanity-cdn.com/bridge.js"
           async
           crossOrigin="anonymous"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.addEventListener('load', function() {
-                // Initialize Sanity bridge with correct origin
-                if (window.sanityBridge) {
-                  window.sanityBridge.init({
-                    targetOrigin: '${SANITY_ORIGIN}'
-                  });
-                }
-              });
-            `
+          onLoad={() => {
+            if (window.sanityBridge) {
+              window.sanityBridge.init({
+                targetOrigin: SANITY_ORIGIN,
+                studioOrigin: STUDIO_ORIGIN
+              })
+            }
           }}
         />
       </head>

@@ -9,18 +9,14 @@ console.log('Studio Environment Variables:', {
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
 })
 
-if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID')
-}
-
-if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_DATASET')
-}
+// Use fallback values if environment variables are not set
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'krdza9oy'
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId,
+  dataset,
   
   plugins: [
     deskTool(),
