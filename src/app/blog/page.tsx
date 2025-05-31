@@ -1,4 +1,4 @@
-import { client, urlForImage } from '@/lib/sanity'
+import { client, urlFor } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -55,7 +55,7 @@ export default async function BlogPage() {
                 {post.mainImage && (
                   <div className="relative h-48 w-full">
                     <Image 
-                      src={urlForImage(post.mainImage)?.url() || ''}
+                      src={urlFor(post.mainImage)?.url() || ''}
                       alt={post.title || 'Blog post image'}
                       fill
                       className="object-cover"
