@@ -2,21 +2,30 @@ import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { Image } from 'sanity'
 
-// Debug environment variables
-console.log('Client Project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
-console.log('Client Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET)
+// Validate environment variables
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
 
-// Use hardcoded values as fallback
-const projectId = 'krdza9oy'
-const dataset = 'production'
+if (!projectId) {
+  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID')
+}
+
+if (!dataset) {
+  throw new Error('Missing environment variable: NEXT_PUBLIC_SANITY_DATASET')
+}
 
 // Create the config
 const config = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || projectId,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || dataset,
+  projectId,
+  dataset,
   apiVersion: '2023-08-01',
-  useCdn: false, // Set to true for production if you want faster responses
-  token: process.env.SANITY_API_READ_TOKEN
+  useCdn: process.env.NODE_ENV === 'production',
+  token: process.env.SANITY_API_READ_TOKEN,
+  perspective: 'published' as const,
+  stega: {
+    enabled: false,
+    studioUrl: '/studio'
+  }
 }
 
 // Create the client

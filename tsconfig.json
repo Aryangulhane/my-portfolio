@@ -22,14 +22,13 @@
       "@/*": ["./src/*"],
       "@/studio/*": ["./studio/*"]
     },
-    "types": ["node", "next"]
+    "types": ["node", "next", "sanity"]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
     "next.config.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next"]
 }
