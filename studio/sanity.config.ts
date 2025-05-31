@@ -16,4 +16,12 @@ export default defineConfig({
   schema: {
     types: schema.types,
   },
+
+  cors: {
+    allowOrigins: [
+      'https://www.sanity.io',
+      'https://aryanportfolio.sanity.studio',
+      'http://localhost:3333'
+    ]
+  }
 })

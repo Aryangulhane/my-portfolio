@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { useEffect } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,6 +15,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    // Handle incoming messages
+    const handleMessage = (event: MessageEvent) => {
+      // Only accept messages from trusted origins
+      const trustedOrigins = [
+        'https://www.sanity.io',
+        'https://aryanportfolio.sanity.studio',
+        'http://localhost:3333'
+      ]
+      
+      if (!trustedOrigins.includes(event.origin)) {
+        console.warn(`Received message from untrusted origin: ${event.origin}`)
+        return
+      }
+
+      // Handle the message
+      console.log('Received message:', event.data)
+    }
+
+    // Add event listener
+    window.addEventListener('message', handleMessage)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [])
+
   return (
     <html lang="en">
       <head>
