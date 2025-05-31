@@ -1,27 +1,21 @@
 import { useEffect, useCallback } from 'react'
 
-const TRUSTED_ORIGINS = [
-  'https://www.sanity.io',
-  'https://aryanportfolio.sanity.studio',
-  'http://localhost:3333'
-]
+const SANITY_ORIGIN = 'https://www.sanity.io'
+const STUDIO_ORIGIN = 'https://aryanportfolio.sanity.studio'
+const LOCAL_ORIGIN = 'http://localhost:3333'
+
+const TRUSTED_ORIGINS = [SANITY_ORIGIN, STUDIO_ORIGIN, LOCAL_ORIGIN]
 
 export function usePostMessage() {
-  const sendMessage = useCallback((message: any, targetOrigin: string = '*') => {
-    // Validate target origin
-    if (targetOrigin !== '*' && !TRUSTED_ORIGINS.includes(targetOrigin)) {
-      console.warn(`Attempting to send message to untrusted origin: ${targetOrigin}`)
-      return
-    }
-
-    // Send the message
-    window.postMessage(message, targetOrigin)
+  const sendMessage = useCallback((message: any, targetOrigin: string = SANITY_ORIGIN) => {
+    // Always use the exact Sanity.io origin for outgoing messages
+    window.postMessage(message, SANITY_ORIGIN)
   }, [])
 
   const receiveMessage = useCallback((callback: (event: MessageEvent) => void) => {
     const handleMessage = (event: MessageEvent) => {
-      // Validate origin
-      if (!TRUSTED_ORIGINS.includes(event.origin)) {
+      // Only accept messages from Sanity.io
+      if (event.origin !== SANITY_ORIGIN) {
         console.warn(`Received message from untrusted origin: ${event.origin}`)
         return
       }

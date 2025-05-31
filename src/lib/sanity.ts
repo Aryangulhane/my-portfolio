@@ -1,6 +1,6 @@
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
-import type { Image } from 'sanity'
+import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 // Validate environment variables
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
@@ -18,14 +18,15 @@ if (!dataset) {
 const config = {
   projectId,
   dataset,
-  apiVersion: '2023-08-01',
-  useCdn: process.env.NODE_ENV === 'production',
-  token: process.env.SANITY_API_READ_TOKEN,
+  apiVersion: '2024-03-19',
+  useCdn: true,
+  token: process.env.SANITY_API_TOKEN,
   perspective: 'published' as const,
   stega: {
     enabled: false,
     studioUrl: '/studio'
-  }
+  },
+  withCredentials: true,
 }
 
 // Create the client
@@ -34,12 +35,19 @@ export const client = createClient(config)
 // Helper function for generating image URLs
 const builder = imageUrlBuilder(client)
 
-export function urlForImage(source: Image) {
-  if (!source?.asset?._ref) {
-    return undefined
-  }
+export function urlFor(source: SanityImageSource) {
   return builder.image(source)
 }
 
 // Export the config for use in other files
 export { config }
+
+// Add type for window.sanityBridge
+declare global {
+  interface Window {
+    sanityBridge?: {
+      init: (config: { targetOrigin: string }) => void
+      send: (message: any) => void
+    }
+  }
+}
