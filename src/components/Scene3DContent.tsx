@@ -25,7 +25,8 @@ export default function Scene3DContent() {
     // Add grid with enhanced visibility
     const gridSize = 30;
     const gridDivisions = 30;
-    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, '#6366f1', '#6366f1');
+    const getThemeMono = () => (document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000');
+    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, getThemeMono(), getThemeMono());
     gridHelper.position.y = -2;
     gridHelper.material.opacity = 0.5;
     gridHelper.material.transparent = true;
@@ -51,7 +52,7 @@ export default function Scene3DContent() {
     // Create material
     const particlesMaterial = new THREE.PointsMaterial({
       size: 0.02,
-      color: '#6366f1',
+      color: getThemeMono(),
       transparent: true,
       opacity: 0.8,
       blending: THREE.AdditiveBlending,
@@ -71,7 +72,7 @@ export default function Scene3DContent() {
     const shadowPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -2);
     const shadowGeometry = new THREE.CircleGeometry(0.5, 32);
     const shadowMaterial = new THREE.MeshBasicMaterial({
-      color: '#6366f1',
+      color: getThemeMono(),
       transparent: true,
       opacity: 0.3,
       side: THREE.DoubleSide
@@ -91,6 +92,13 @@ export default function Scene3DContent() {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    const obs = new MutationObserver(() => {
+      const c = getThemeMono();
+      (gridHelper.material as any).color.set(c);
+      (particlesMaterial as any).color.set(c);
+      (shadowMaterial as any).color.set(c);
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     // Animation
     const animate = () => {
@@ -135,6 +143,7 @@ export default function Scene3DContent() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
+      obs.disconnect();
       mountRef.current?.removeChild(renderer.domElement);
       scene.remove(particlesMesh);
       scene.remove(gridHelper);

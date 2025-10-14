@@ -1,234 +1,255 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import Scene3D from "@/components/Scene3D";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from 'next/link'; 
+// Added FaGraduationCap for the timeline
+import { FaReact, FaNodeJs, FaDownload, FaEnvelope, FaGraduationCap } from "react-icons/fa";
+import { SiTypescript, SiNextdotjs, SiTailwindcss, SiMongodb } from "react-icons/si";
+// Background and hero components from homepage to match visual language
+import Scene3D from "@/components/Scene3D";
+import Footer from "@/components/Footer";
 
+// Reusable Framer Motion Variants for clean, staggered animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+// --- Page Component ---
 export default function AboutPage() {
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
+  const [isMounted, setIsMounted] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
   }, []);
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
-  };
-
   const skills = [
-    { name: "React", level: 90 },
-    { name: "TypeScript", level: 85 },
-    { name: "Node.js", level: 80 },
-    { name: "Next.js", level: 85 },
-    { name: "Tailwind CSS", level: 90 },
-    { name: "MongoDB", level: 75 },
+    { name: "React & Next.js", level: 90, icon: <SiNextdotjs className="text-white" /> },
+    { name: "TypeScript", level: 85, icon: <SiTypescript className="text-primary" /> },
+    { name: "Node.js", level: 80, icon: <FaNodeJs className="text-green-500" /> },
+    { name: "Tailwind CSS", level: 95, icon: <SiTailwindcss className="text-primary" /> },
+    { name: "MongoDB & Databases", level: 75, icon: <SiMongodb className="text-green-500" /> },
+    { name: "UI/UX & Animation", level: 85, icon: <FaReact className="text-primary" /> },
   ];
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-background text-foreground">
-        <div className="h-[400px] w-full bg-gray-100 animate-pulse rounded-lg" />
-      </div>
-    );
+  if (!isMounted) {
+    return <AboutPageSkeleton />;
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Left Column - Text Content */}
-            <div className="space-y-6">
-              <motion.h1 
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold"
-                {...fadeInUp}
-              >
-                About <span className="text-primary">Me</span>
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground relative">
+      {/* Hero Section - Text Focused & Futuristic */}
+      <motion.section
+        className="relative isolate flex min-h-[70vh] items-center justify-center overflow-hidden px-4 py-24 text-center sm:px-6 lg:px-8"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        {/* Subtle background gradient */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_100%_at_50%_0%,rgba(var(--primary-rgb),0.1)_0%,rgba(var(--primary-rgb),0)_100%)]"
+        />
+
+        <div className="mx-auto max-w-4xl space-y-8 relative z-10">
+          <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+            <div>
+              <motion.h1 variants={itemVariants} className="text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
+                <span className="block text-accent text-lg font-medium">Hi, I&apos;m Aryan</span>
+                <span className="block mt-2 gradient-text">Engineer in Brain & Human in Heart</span>
               </motion.h1>
-              <motion.div 
-                className="text-lg sm:text-xl text-muted-foreground"
-                {...fadeInUp}
-                transition={{ delay: 0.2 }}
-              >
-                I'm a passionate full-stack developer with a keen eye for creating elegant solutions in the least amount of time. I specialize in building responsive web applications using modern technologies.
-              </motion.div>
-              <motion.div 
-                className="flex flex-wrap gap-4"
-                {...fadeInUp}
-                transition={{ delay: 0.4 }}
-              >
-                <a 
-                  href="/resume.pdf" 
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Download CV
+
+              <motion.p variants={itemVariants} className="mt-4 text-base text-muted-foreground sm:text-lg">
+                I am a Student, facinated about the Technologies Currently working on Wed Developent and Artificial Intelligence and Machine Learning 
+              </motion.p>
+
+              <motion.div variants={itemVariants} className="mt-6 flex flex-wrap gap-4">
+                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn animated-border group flex items-center gap-2 px-6 py-2 text-sm font-semibold">
+                  <FaDownload className="transition-transform group-hover:scale-110" /> Resume
                 </a>
-                <a 
-                  href="#contact" 
-                  className="px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
-                >
-                  Contact Me
-                </a>
+                <Link href="/contact" className="btn group flex items-center gap-2 rounded-full border border-border px-6 py-2 text-sm font-semibold hover:border-primary hover:text-primary">
+                <FaEnvelope className="transition-transform group-hover:translate-x-1" /> Contact
+                </Link>
               </motion.div>
             </div>
 
-            {/* Right Column - 3D Scene */}
-            <motion.div 
-              className="relative h-[400px] rounded-2xl overflow-hidden"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <Scene3D />
+            {/* Decorative glass card with tech icons to the right */}
+            <motion.div variants={itemVariants} className="order-first md:order-last flex items-center justify-center">
+              <div className="glass w-56 rounded-xl p-6 text-center border border-border shadow-lg">
+                <div className="mb-3 text-sm font-medium text-muted-foreground">Core Technologies</div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="tech-icon bg-primary/10 rounded-full p-3">
+                    <SiNextdotjs className="text-xl text-white" />
+                  </div>
+                  <div className="tech-icon bg-primary/10 rounded-full p-3">
+                    <SiTypescript className="text-xl text-primary" />
+                  </div>
+                  <div className="tech-icon bg-primary/10 rounded-full p-3">
+                    <FaReact className="text-xl text-primary" />
+                  </div>
+                </div>
+                <div className="mt-4 text-xs text-muted-foreground">Fast. Thoughtful. Accessible.</div>
+              </div>
             </motion.div>
+          </div>
+          {/* Futuristic stats strip */}
+          <motion.div variants={itemVariants} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="glass rounded-lg p-4 text-center border border-border">
+              <div className="text-3xl font-bold">5+</div>
+              <div className="text-sm text-muted-foreground">Time when started exploration</div>
+            </div>
+            <div className="glass rounded-lg p-4 text-center border border-border">
+              <div className="text-3xl font-bold">4+</div>
+              <div className="text-sm text-muted-foreground">Projects worked on</div>
+            </div>
+            <div className="glass rounded-lg p-4 text-center border border-border">
+              <div className="text-3xl font-bold">1</div>
+              <div className="text-sm text-muted-foreground">Open Source Contributions</div>
+            </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Skills Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2 
-            className="text-3xl sm:text-4xl font-bold text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            My <span className="text-primary">Skills</span>
+      <motion.section
+        className="bg-card/50 px-4 py-20 sm:px-6 lg:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <div className="mx-auto max-w-7xl">
+          <motion.h2 variants={itemVariants} className="mb-12 text-center text-3xl font-bold sm:text-4xl">
+            My <span className="text-primary">Technical Toolkit</span>
           </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skills.map((skill, index) => (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {skills.map((skill) => (
               <motion.div
                 key={skill.name}
-                className="bg-background/50 p-6 rounded-xl border border-border hover:border-primary/50 transition-colors"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
+                variants={itemVariants}
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="glass cursor-pointer rounded-xl border border-border p-6 transition-colors hover:border-primary/50"
               >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium">{skill.name}</span>
-                  <span className="text-muted-foreground">{skill.level}%</span>
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-2xl">
+                    {skill.icon}
+                  </div>
+                  <span className="text-lg font-semibold">{skill.name}</span>
                 </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
                   <motion.div
-                    className="h-full bg-primary"
+                    className="h-full bg-gradient-to-r from-primary to-accent"
                     initial={{ width: 0 }}
                     whileInView={{ width: `${skill.level}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, delay: index * 0.1 }}
+                    transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
                   />
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Experience Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2 
-            className="text-3xl sm:text-4xl font-bold text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            Work <span className="text-primary">Experience</span>
+      {/* Experience & Education Timeline */}
+      <motion.section
+        className="px-4 py-20 sm:px-6 lg:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <div className="mx-auto max-w-3xl">
+          <motion.h2 variants={itemVariants} className="mb-12 text-center text-3xl font-bold sm:text-4xl">
+            My <span className="text-primary">Journey</span>
           </motion.h2>
 
-          <div className="space-y-8">
-            {[1, 2, 3].map((_, index) => (
-              <motion.div
-                key={index}
-                className="relative pl-8 border-l-2 border-primary/20"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-              >
-                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary" />
-                <motion.div 
-                  className="bg-card/50 p-6 rounded-xl border border-border hover:border-primary/50 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h3 className="text-xl font-bold mb-2">Senior Developer</h3>
-                  <motion.div 
-                    className="text-muted-foreground mb-2"
-                  >
-                    Company Name • 2020 - Present
-                  </motion.div>
-                  <motion.div 
-                    className="text-muted-foreground"
-                  >
-                    Led the development of multiple web applications using React, Node.js, and MongoDB.
-                    Implemented CI/CD pipelines and improved application performance by 40%.
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            ))}
+          <div className="relative border-l-2 border-primary/20">
+            {/* Experience Item */}
+            <TimelineItem
+              title="Senior Full-Stack Developer"
+              subtitle="Tech Solutions Inc. • 2022 - Present"
+              description="Led development of a SaaS platform using Next.js and TypeScript, improving performance by 40%. Mentored junior developers and established CI/CD pipelines."
+              icon={<FaNodeJs className="h-4 w-4 text-primary-foreground" />}
+            />
+            {/* Education Item */}
+            <TimelineItem
+              title="B.Tech in Computer Science"
+              subtitle="MIT ADT • 2025 - 2029 (Expected)"
+              description="Pursuing a B.Tech degree with a focus on AI and web technologies. Actively participating in hackathons and coding clubs, with a goal of contributing to open-source projects."
+              icon={<FaGraduationCap className="h-4 w-4 text-primary-foreground" />}
+            />
           </div>
         </div>
-      </section>
-
-      {/* Education Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2 
-            className="text-3xl sm:text-4xl font-bold text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            Education & <span className="text-primary">Certifications</span>
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2].map((_, index) => (
-              <motion.div
-                key={index}
-                className="bg-background/50 p-6 rounded-xl border border-border hover:border-primary/50 transition-colors"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <h3 className="text-xl font-bold mb-2">Bachelor of Science in Computer Science</h3>
-                <motion.div 
-                  className="text-muted-foreground mb-2"
-                >
-                  University Name • 2016 - 2020
-                </motion.div>
-                <motion.div 
-                  className="text-muted-foreground"
-                >
-                  Graduated with honors. Specialized in Software Engineering and Web Development.
-                  Participated in various hackathons and coding competitions.
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </motion.section>
     </div>
   );
-} 
+}
+
+// --- Helper Components ---
+
+interface TimelineItemProps {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+function TimelineItem({ title, subtitle, description, icon }: TimelineItemProps) {
+  return (
+    <motion.div variants={itemVariants} className="relative mb-10 ml-8">
+      <span className="absolute -left-[41px] flex h-8 w-8 items-center justify-center rounded-full bg-primary ring-8 ring-background">
+        {icon}
+      </span>
+      <div className="glass rounded-xl border border-border p-6 transition-colors duration-300 hover:border-accent/50">
+        <h3 className="mb-1 text-xl font-bold text-foreground">{title}</h3>
+        <p className="mb-3 text-sm font-normal leading-none text-muted-foreground">{subtitle}</p>
+        <p className="text-base font-normal text-muted-foreground">{description}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+// A more accurate skeleton component
+function AboutPageSkeleton() {
+  return (
+    <div className="container mx-auto animate-pulse px-4 py-24">
+      <div className="space-y-24">
+        {/* Hero Skeleton */}
+        <div className="mx-auto flex max-w-4xl flex-col items-center space-y-8">
+          <div className="h-16 w-3/4 rounded-lg bg-muted/50"></div>
+          <div className="h-8 w-full rounded-lg bg-muted/50"></div>
+          <div className="h-8 w-5/6 rounded-lg bg-muted/50"></div>
+          <div className="flex gap-6 pt-4">
+            <div className="h-12 w-44 rounded-full bg-primary/20"></div>
+            <div className="h-12 w-44 rounded-full bg-muted/50"></div>
+          </div>
+        </div>
+
+        {/* Skills Section Skeleton */}
+        <div>
+          <div className="mx-auto mb-12 h-10 w-1/3 rounded-lg bg-muted/50"></div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => <div key={i} className="h-32 rounded-xl bg-muted/50"></div>)}
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+  
+}

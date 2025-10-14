@@ -1,33 +1,53 @@
+// src/components/ClientLayout.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
 import IntroAnimation from "@/components/IntroAnimation";
-import ParticleBackground from "@/components/ParticleBackground";
-import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const [showContent, setShowContent] = useState(false);
-  const pathname = usePathname();
-  const isBlogPage = pathname.startsWith('/blog');
+  // This state determines if the intro has finished.
+  const [introFinished, setIntroFinished] = useState(false);
+
+  useEffect(() => {
+    // Check session storage to see if the intro has already played in this session.
+    // This prevents the animation from re-playing on every page navigation.
+    if (sessionStorage.getItem("introPlayed")) {
+      setIntroFinished(true);
+    }
+  }, []);
+
+  // This function is passed to the IntroAnimation component.
+  // When the animation completes, it updates the state and sets the session flag.
+  const handleIntroComplete = () => {
+    setIntroFinished(true);
+    sessionStorage.setItem("introPlayed", "true");
+  };
 
   return (
     <>
-      {!isBlogPage && <IntroAnimation onComplete={() => setShowContent(true)} />}
-      
-      {(showContent || isBlogPage) && (
-        <>
-          <ParticleBackground />
-          <Navbar />
-          <main className="min-h-screen pt-16">
-            {children}
-          </main>
-          <Footer />
-          <ThemeSwitcher />
-        </>
-      )}
+      <AnimatePresence mode="wait">
+        {introFinished ? (
+          // KEY CONTENT: Shown after the intro is complete.
+          <motion.div
+            key="main-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Navbar />
+            <main>
+              {children}
+            </main>
+            <Footer />
+          </motion.div>
+        ) : (
+          // INTRO ANIMATION: Shown only if the intro has not yet played this session.
+          <IntroAnimation key="intro-animation" onComplete={handleIntroComplete} />
+        )}
+      </AnimatePresence>
     </>
   );
-} 
+}

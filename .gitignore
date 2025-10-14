@@ -28,6 +28,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env # Recommended: Ignore all .env files
 
 # vercel
 .vercel
@@ -42,3 +43,6 @@ next-env.d.ts
 
 # Sanity
 .sanity/
+
+# package manager configs
+.npmrc # Recommended: Can contain auth tokens

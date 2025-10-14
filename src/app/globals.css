@@ -2,51 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Base colors with RGB values for opacity support */
-  --primary: #3b82f6;
-  --primary-rgb: 59, 130, 246;
-  --secondary: #10b981;
-  --secondary-rgb: 16, 185, 129;
-  --accent: #8b5cf6;
-  --accent-rgb: 139, 92, 246;
-  --background: #0f172a;
-  --background-rgb: 15, 23, 42;
-  --foreground: #f8fafc;
-  --foreground-rgb: 248, 250, 252;
+/* Two-theme design: Light (default) and Dark. High contrast and clean effects. */
 
-  /* Semantic colors */
-  --card: #1e293b;
-  --card-rgb: 30, 41, 59;
-  --card-foreground: #f8fafc;
-  --popover: #1e293b;
-  --popover-rgb: 30, 41, 59;
-  --popover-foreground: #f8fafc;
-  --muted: #334155;
-  --muted-rgb: 51, 65, 85;
-  --muted-foreground: #94a3b8;
-  --destructive: #ef4444;
-  --destructive-rgb: 239, 68, 68;
-  --destructive-foreground: #f8fafc;
-  --border: #334155;
-  --border-rgb: 51, 65, 85;
-  --input: #334155;
-  --ring: #3b82f6;
+:root {
+  /* Core palette (light) */
+  --background: #ffffff;
+  --background-rgb: 255, 255, 255;
+  --foreground: #0a0a0a;
+  --foreground-rgb: 10, 10, 10;
+
+  /* Surface and borders */
+  --card: #f7f7f8;
+  --card-rgb: 247, 247, 248;
+  --border: #e5e7eb;
+  --border-rgb: 229, 231, 235;
+  --muted: #f1f5f9;
+  --muted-rgb: 241, 245, 249;
+  --muted-foreground: #64748b;
+
+  /* Brand accents kept monochrome-friendly */
+  --primary: #111827; /* near-black for strong emphasis in light */
+  --primary-rgb: 17, 24, 39;
+  --primary-foreground: #ffffff;
+
+  --accent: #111827; /* use same tone for consistent, minimal look */
+  --accent-rgb: 17, 24, 39;
+  --accent-foreground: #ffffff;
+
+  /* Utility */
+  --ring: var(--primary);
   --radius: 0.5rem;
 
-  /* Effects */
-  --glow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px var(--accent);
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  /* Glass/Frosted derived from background */
+  --glass-bg: rgba(var(--background-rgb), 0.6);
+  --glass-border: rgba(var(--border-rgb), 0.7);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Base styles */
+[data-theme="dark"] {
+  /* Charcoal base with high-contrast off-white text */
+  --background: #0e0e10;
+  --background-rgb: 14, 14, 16;
+  --foreground: #e6e6e6;
+  --foreground-rgb: 230, 230, 230;
+
+  /* Subtle elevated surfaces and structure */
+  --card: #141416;
+  --card-rgb: 20, 20, 22;
+  --border: #2a2a2e;
+  --border-rgb: 42, 42, 46;
+  --muted: #1a1a1d;
+  --muted-rgb: 26, 26, 29;
+  --muted-foreground: #a1a1a6;
+
+  /* Nike-inspired red accent for calls-to-action and highlights */
+  --primary: #e10600; /* Nike red */
+  --primary-rgb: 225, 6, 0;
+  --primary-foreground: #0b0b0c;
+
+  --accent: #e10600;
+  --accent-rgb: 225, 6, 0;
+  --accent-foreground: #0b0b0c;
+
+  --ring: var(--primary);
+  --glass-bg: rgba(var(--background-rgb), 0.55);
+  --glass-border: rgba(var(--border-rgb), 0.85);
+  --glass-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
 @layer base {
   * {
     @apply border-border;
-    transition: background-color 0.3s ease-in-out, 
-                color 0.3s ease-in-out, 
-                border-color 0.3s ease-in-out,
-                box-shadow 0.3s ease-in-out;
   }
 
   html {
@@ -56,74 +82,122 @@
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-color: var(--background);
-    color: var(--foreground);
     min-height: 100vh;
-    position: relative;
-  }
-
-  /* Theme transition overlay */
-  .theme-transition-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: var(--background);
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  .theme-transition-overlay.active {
-    opacity: 1;
-    pointer-events: all;
   }
 
   ::selection {
-    @apply bg-accent text-accent-foreground;
+    background: rgba(var(--accent-rgb), 0.2);
+    color: var(--foreground);
   }
 }
 
-/* Component styles */
+/* Map common utilities to variables (keeps existing JSX classes working) */
+.bg-background { background-color: var(--background) !important; }
+.text-foreground { color: var(--foreground) !important; }
+.bg-card { background-color: var(--card) !important; }
+.bg-muted { background-color: var(--muted) !important; }
+.text-muted-foreground { color: var(--muted-foreground) !important; }
+.bg-primary { background-color: var(--primary) !important; }
+.bg-accent { background-color: var(--accent) !important; }
+.text-accent { color: var(--accent) !important; }
+.border-border { border-color: var(--border) !important; }
+
 @layer components {
   .glass {
-    @apply bg-background/50 backdrop-blur-lg border border-accent/20;
-    transition: all 0.3s ease-in-out;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
   }
-  
+
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
-    transition: background-image 0.3s ease-in-out;
+    background: linear-gradient(90deg, var(--foreground), rgba(var(--foreground-rgb), 0.6));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
-  
+
   .cyber-text {
     @apply font-mono tracking-wider;
   }
+}
 
-  .glass-card {
-    @apply bg-background/50 backdrop-blur-lg border border-accent/20 rounded-lg p-6;
-    transition: all 0.3s ease-in-out;
-  }
+@layer utilities {
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .hover-glow { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+  .hover-glow:hover { box-shadow: 0 10px 30px rgba(var(--foreground-rgb), 0.1); transform: translateY(-2px); }
+}
 
-  .glass-button {
-    @apply bg-background/50 hover:bg-background/70 backdrop-blur-lg border border-accent/20 
-           hover:border-accent/40 transition-all duration-300 rounded-lg px-4 py-2;
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 
-  /* Add transitions to all interactive elements */
-  button, a, input, textarea, select {
-    transition: all 0.3s ease-in-out;
-  }
+/* Focus and scrollbar, tuned for both themes */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--ring, var(--primary-rgb)), 0.9), 0 0 0 4px rgba(var(--background-rgb), 1);
+  border-radius: var(--radius);
+}
 
-  /* Ensure all cards have consistent transitions */
-  .card {
-    transition: all 0.3s ease-in-out;
-  }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: rgba(var(--foreground-rgb), 0.2); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--foreground-rgb), 0.35); }
 
-  /* Ensure all text elements have consistent transitions */
-  h1, h2, h3, h4, h5, h6, p, span, div {
-    transition: color 0.3s ease-in-out;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* In src/app/globals.css */
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
   }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* removed legacy :root color block */
+
+/* Map commonly used utility classes to CSS variables so theme switching works */
+/* removed duplicate utility mappings */
+
+/* small helpers used by components */
+.glow { box-shadow: var(--glow); }
+.shadow-card { box-shadow: var(--shadow); }
+
+
+/* Base styles */
+/* removed duplicate base layer and overlay */
+
+/* Component styles */
+/* removed duplicate components layer */
+/* You no longer need to define static colors in :root */
+
+.btn {
+  /* Use the hsl() function to construct the color */
+  background-color: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
+  
+  /* Opacity is now incredibly easy and precise */
+  box-shadow: 0 0 20px hsl(var(--primary-h) var(--primary-s) var(--primary-l) / 0.3);
+}
+
+.card {
+  /* Use the derived semantic variables */
+  background-color: hsl(var(--primary-h) var(--primary-s) var(--card-l));
+  color: hsl(var(--primary-h) var(--primary-s) var(--card-foreground-l));
+  border-color: hsl(var(--primary-h) var(--primary-s) var(--border-l));
 }
 
 /* Utility classes */
@@ -188,69 +262,9 @@
 }
 
 /* Theme-specific styles with transitions */
-[data-theme="dark"] {
-  --background: #0a0a0f;
-  --background-rgb: 10, 10, 15;
-  --foreground: #ffffff;
-  --foreground-rgb: 255, 255, 255;
-  --card: #111118;
-  --card-rgb: 17, 17, 24;
-  --card-foreground: #ffffff;
-  --popover: #111118;
-  --popover-rgb: 17, 17, 24;
-  --popover-foreground: #ffffff;
-  --primary: #3b82f6;
-  --primary-rgb: 59, 130, 246;
-  --primary-foreground: #ffffff;
-  --secondary: #1e1e2e;
-  --secondary-rgb: 30, 30, 46;
-  --secondary-foreground: #ffffff;
-  --muted: #1e1e2e;
-  --muted-rgb: 30, 30, 46;
-  --muted-foreground: #a1a1aa;
-  --accent: #3b82f6;
-  --accent-rgb: 59, 130, 246;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --destructive-rgb: 239, 68, 68;
-  --destructive-foreground: #ffffff;
-  --border: #2a2a3a;
-  --border-rgb: 42, 42, 58;
-  --input: #2a2a3a;
-  --ring: #3b82f6;
-}
+/* removed legacy dark theme block with blue primary */
 
-[data-theme="light"] {
-  --background: #ffffff;
-  --background-rgb: 255, 255, 255;
-  --foreground: #000000;
-  --foreground-rgb: 0, 0, 0;
-  --card: #f8fafc;
-  --card-rgb: 248, 250, 252;
-  --card-foreground: #000000;
-  --popover: #f8fafc;
-  --popover-rgb: 248, 250, 252;
-  --popover-foreground: #000000;
-  --primary: #3b82f6;
-  --primary-rgb: 59, 130, 246;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-rgb: 241, 245, 249;
-  --secondary-foreground: #000000;
-  --muted: #f1f5f9;
-  --muted-rgb: 241, 245, 249;
-  --muted-foreground: #64748b;
-  --accent: #3b82f6;
-  --accent-rgb: 59, 130, 246;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --destructive-rgb: 239, 68, 68;
-  --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --border-rgb: 226, 232, 240;
-  --input: #e2e8f0;
-  --ring: #3b82f6;
-}
+/* removed legacy light theme block with blue primary */
 
 /* Theme Transition Styles */
 * {
@@ -325,32 +339,7 @@ button:hover {
 }
 
 /* Theme-specific styles */
-[data-theme="cyber"] {
-  --background: #0f172a;
-  --background-rgb: 15, 23, 42;
-  --foreground: #e2e8f0;
-  --foreground-rgb: 226, 232, 240;
-  --primary: #06b6d4;
-  --primary-rgb: 6, 182, 212;
-  --secondary: #1e293b;
-  --secondary-rgb: 30, 41, 59;
-  --accent: #06b6d4;
-  --accent-rgb: 6, 182, 212;
-  --accent-foreground: #ffffff;
-  --card: #1e293b;
-  --card-rgb: 30, 41, 59;
-  --card-foreground: #e2e8f0;
-  --popover: #1e293b;
-  --popover-rgb: 30, 41, 59;
-  --popover-foreground: #e2e8f0;
-  --muted: #334155;
-  --muted-rgb: 51, 65, 85;
-  --muted-foreground: #94a3b8;
-  --border: #334155;
-  --border-rgb: 51, 65, 85;
-  --input: #334155;
-  --ring: #06b6d4;
-}
+/* removed legacy themed blocks (cyber, neon, matrix, synthwave, retro) */
 
 [data-theme="neon"] {
   --background: #000000;
@@ -809,6 +798,7 @@ button:hover {
 /* Update gradient text for light theme */
 [data-theme="light"] .gradient-text {
   background: linear-gradient(45deg, var(--accent), var(--primary));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -878,4 +868,27 @@ button:hover {
   .cyber-text {
     @apply font-mono tracking-wider;
   }
+}
+
+
+/* In src/app/globals.css */
+
+/* Create a pseudo-element for the transition overlay */
+html::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  background-color: var(--background);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* When transitioning, fade the overlay in */
+html[data-transitioning='true']::before {
+  opacity: 1;
 }
