@@ -1,48 +1,53 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# Dependencies
 node_modules/
 **/node_modules/
 /.pnp
 .pnp.js
 
-# testing
+# Testing
 /coverage
+**/coverage/
 
-# next.js
+# Next.js (Frontend Build)
 /frontend/.next/
 /frontend/out/
+/frontend/build/
+frontend/next-env.d.ts
 
-# production
-/build
-/backend/dist
+# Sanity (Backend Build)
+/backend/dist/
+.sanity/
 
-# misc
+# Production
+/build/
+dist/
+
+# Misc
 .DS_Store
 *.pem
 
-# debug
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env # Recommended: Ignore all .env files
+# Environment Variables
+.env
+.env.*
+!.env.example
 
-# vercel
+# Vercel Deployment
 .vercel
+/frontend/.vercel/
 
-# typescript
+# TypeScript
 *.tsbuildinfo
-next-env.d.ts
 
 # IDE
 .idea/
 .vscode/
 
-# Sanity
-.sanity/
-
-# package manager configs
-.npmrc # Recommended: Can contain auth tokens
+# Package Manager Configs
+.npmrc # Optional: can contain auth tokens depending on your setup

@@ -2,13 +2,11 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from 'next/link'; 
 // Added FaGraduationCap for the timeline
 import { FaReact, FaNodeJs, FaDownload, FaEnvelope, FaGraduationCap } from "react-icons/fa";
 import { SiTypescript, SiNextdotjs, SiTailwindcss, SiMongodb } from "react-icons/si";
 // Background and hero components from homepage to match visual language
-import Scene3D from "@/components/Scene3D";
 import Footer from "@/components/Footer";
 
 // Reusable Framer Motion Variants for clean, staggered animations
