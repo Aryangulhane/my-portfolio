@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Project
+
+This repository contains the source code for my portfolio, consisting of a Next.js frontend and a Sanity backend.
+
+## Project Structure
+
+The project has been structured into two main directories:
+
+- `/frontend`: Contains the Next.js application (React, Tailwind CSS, etc.).
+- `/backend`: Contains the Sanity Studio configuration and schemas.
 
 ## Getting Started
 
-First, run the development server:
+From the root directory, you can run the following scripts to manage both applications:
 
+### Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run install:all
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Run Frontend Development Server
+```bash
+npm run dev:frontend
+```
+The Next.js application will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Run Backend (Sanity Studio) Development Server
+```bash
+npm run dev:backend
+```
+The Sanity Studio will be available at [http://localhost:3333](http://localhost:3333).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Build for Production
+```bash
+npm run build:frontend
+npm run build:backend
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+- **Frontend**: Deploy the `frontend` directory directly to Vercel. Make sure to set the Root Directory to `frontend` in your Vercel project settings.
+- **Backend**: Deploy the `backend` directory using Sanity's deployment commands (`cd backend && npx sanity deploy`).

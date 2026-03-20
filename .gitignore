@@ -10,12 +10,12 @@ node_modules/
 /coverage
 
 # next.js
-/.next/
-/out/
+/frontend/.next/
+/frontend/out/
 
 # production
 /build
-/studio/dist
+/backend/dist
 
 # misc
 .DS_Store
