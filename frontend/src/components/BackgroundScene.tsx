@@ -31,24 +31,29 @@ export function BackgroundScene() {
     renderer.domElement.style.pointerEvents = 'none'; // Allow clicking through the canvas
     mountNode.appendChild(renderer.domElement);
 
-    // --- Theme-Aware Grid ---
-    const getThemeColor = () => {
+    // --- Theme-Aware Colors ---
+    const getThemeColors = () => {
       const root = document.documentElement;
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      return isDark ? '#ffffff' : '#000000';
+      const isDark = root.getAttribute('data-theme') !== 'light';
+      return {
+        particle: isDark ? '#f97316' : '#ea580c',
+        grid: isDark ? '#ffffff' : '#000000',
+      };
     };
     
-    const gridHelper = new THREE.GridHelper(30, 30, getThemeColor(), getThemeColor());
+    const colors = getThemeColors();
+
+    const gridHelper = new THREE.GridHelper(30, 30, colors.grid, colors.grid);
     gridHelper.position.y = -2;
-    gridHelper.material.opacity = 0.1;
+    gridHelper.material.opacity = 0.07;
     gridHelper.material.transparent = true;
     scene.add(gridHelper);
 
-    // Update grid color automatically on theme change.
+    // Update colors automatically on theme change.
     const themeObserver = new MutationObserver(() => {
-      const color = getThemeColor();
-      gridHelper.material.color.set(color);
-      (particlesMaterial as any).color.set(color);
+      const c = getThemeColors();
+      gridHelper.material.color.set(c.grid);
+      (particlesMaterial as any).color.set(c.particle);
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
@@ -57,18 +62,18 @@ export function BackgroundScene() {
 
     // --- Floating Particles ---
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000;
+    const particlesCount = 1200;
     const posArray = new Float32Array(particlesCount * 3);
     for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 10;
+      posArray[i] = (Math.random() - 0.5) * 12;
     }
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     
     const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.01,
-      color: getThemeColor(),
+      size: 0.012,
+      color: colors.particle,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.4,
       blending: THREE.AdditiveBlending,
     });
     
@@ -83,27 +88,20 @@ export function BackgroundScene() {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    // --- Animation Loop ---
+    // --- Single Animation Loop (fixed: no more double RAF) ---
     const clock = new THREE.Clock();
-    const animate = () => {
+    let animationFrameId: number;
+    const loop = () => {
+      animationFrameId = requestAnimationFrame(loop);
       const elapsedTime = clock.getElapsedTime();
       
-      // Animate particles
       particlesMesh.rotation.y = elapsedTime * 0.05;
       particlesMesh.rotation.x = mouse.y * 0.1;
       particlesMesh.rotation.y += mouse.x * 0.1;
 
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
     };
-    
-    // Start animation loop
-    let animationFrameId: number;
-    const startAnimation = () => {
-      animate();
-      animationFrameId = requestAnimationFrame(startAnimation);
-    };
-    startAnimation();
+    loop();
 
     // --- Resize Handler ---
     const handleResize = () => {

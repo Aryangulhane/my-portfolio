@@ -2,14 +2,13 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import Link from 'next/link'; 
-// Added FaGraduationCap for the timeline
-import { FaReact, FaNodeJs, FaDownload, FaEnvelope, FaGraduationCap } from "react-icons/fa";
-import { SiTypescript, SiNextdotjs, SiTailwindcss, SiMongodb } from "react-icons/si";
-// Background and hero components from homepage to match visual language
+import Link from 'next/link';
 import Footer from "@/components/Footer";
+import {
+  FaBolt, FaGraduationCap, FaRobot, FaMicrochip, FaWifi,
+  FaAtom, FaMusic, FaCamera, FaFilm, FaArrowRight
+} from "react-icons/fa";
 
-// Reusable Framer Motion Variants for clean, staggered animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -27,135 +26,163 @@ const itemVariants = {
   },
 };
 
-// --- Page Component ---
+// --- Skills Data (honest, hardware-first) ---
+const skillCategories = [
+  {
+    title: 'Hardware & Electronics',
+    skills: ['ESP32', 'Arduino', 'Relay Circuits', 'LiPo Battery Systems', 'PCB Basics', 'Soldering'],
+    icon: <FaMicrochip />,
+  },
+  {
+    title: 'Embedded / Firmware',
+    skills: ['C/C++ for MCUs', 'Bluetooth Serial', 'Web Servers on ESP', 'I2C / SPI Communication'],
+    icon: <FaBolt />,
+  },
+  {
+    title: 'Platforms & Tools',
+    skills: ['Blynk IoT', 'ESP Rainmaker', 'KiCad (learning)', 'Git', 'VS Code'],
+    icon: <FaWifi />,
+  },
+  {
+    title: 'Languages',
+    skills: ['C / C++', 'Python (basics)', 'JavaScript (enough to build tools)', 'HTML / CSS'],
+    icon: <FaRobot />,
+  },
+];
+
+// --- Timeline Data (real) ---
+const timeline = [
+  {
+    title: 'Hardware Intern',
+    subtitle: 'High Dynamics • 2025 - Present',
+    description: 'Building battery packs and power distribution boards for drones. Currently assembling a 3S 12V LiPo pack with connectors and working on a custom PDB.',
+    icon: <FaBolt className="h-4 w-4" />,
+  },
+  {
+    title: 'B.Tech in Computer Science',
+    subtitle: 'MIT ADT University • 2025 - 2029 (Expected)',
+    description: 'First-year CS student with a focus on electronics, embedded systems, and AI. Participating in hardware projects and internships alongside academics.',
+    icon: <FaGraduationCap className="h-4 w-4" />,
+  },
+  {
+    title: '4-Channel Home Automation',
+    subtitle: 'Class 10 • 2024',
+    description: 'Built a complete home automation system using ESP32 with Rainmaker and Blynk IoT platforms. Controlled 4 appliances via smartphone.',
+    icon: <FaWifi className="h-4 w-4" />,
+  },
+  {
+    title: 'First Robot Build',
+    subtitle: 'Class 9 • 2023',
+    description: 'Built my first obstacle-avoiding robot with Arduino and ultrasonic sensors. This is where it all started.',
+    icon: <FaRobot className="h-4 w-4" />,
+  },
+];
+
+// --- Interests ---
+const interests = [
+  { icon: <FaMicrochip />, label: 'Electronics' },
+  { icon: <FaBolt />, label: 'Embedded Systems' },
+  { icon: <FaAtom />, label: 'Physics' },
+  { icon: <FaMusic />, label: 'Music' },
+  { icon: <FaCamera />, label: 'Photography' },
+  { icon: <FaFilm />, label: 'Filmmaking' },
+];
+
 export default function AboutPage() {
   const [isMounted, setIsMounted] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => { setIsMounted(true); }, []);
 
-  const skills = [
-    { name: "React & Next.js", level: 90, icon: <SiNextdotjs className="text-white" /> },
-    { name: "TypeScript", level: 85, icon: <SiTypescript className="text-primary" /> },
-    { name: "Node.js", level: 80, icon: <FaNodeJs className="text-green-500" /> },
-    { name: "Tailwind CSS", level: 95, icon: <SiTailwindcss className="text-primary" /> },
-    { name: "MongoDB & Databases", level: 75, icon: <SiMongodb className="text-green-500" /> },
-    { name: "UI/UX & Animation", level: 85, icon: <FaReact className="text-primary" /> },
-  ];
-
-  if (!isMounted) {
-    return <AboutPageSkeleton />;
-  }
+  if (!isMounted) return <AboutPageSkeleton />;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground relative">
-      {/* Hero Section - Text Focused & Futuristic */}
+      {/* ===== HERO ===== */}
       <motion.section
-        className="relative isolate flex min-h-[70vh] items-center justify-center overflow-hidden px-4 py-24 text-center sm:px-6 lg:px-8"
+        className="relative px-6 py-24 sm:py-32"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        {/* Subtle background gradient */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_100%_at_50%_0%,rgba(var(--primary-rgb),0.1)_0%,rgba(var(--primary-rgb),0)_100%)]"
-        />
+        <div className="mx-auto max-w-3xl">
+          <motion.div variants={itemVariants} className="mb-3 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1 text-xs font-mono uppercase tracking-wider text-muted-foreground">
+            About Me
+          </motion.div>
 
-        <div className="mx-auto max-w-4xl space-y-8 relative z-10">
-          <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-            <div>
-              <motion.h1 variants={itemVariants} className="text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
-                <span className="block text-accent text-lg font-medium">Hi, I&apos;m Aryan</span>
-                <span className="block mt-2 gradient-text">Engineer in Brain & Human in Heart</span>
-              </motion.h1>
+          <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-2">
+            Engineer in training.
+          </motion.h1>
+          <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-8">
+            Tinkerer by <span className="text-primary">nature</span>.
+          </motion.h1>
 
-              <motion.p variants={itemVariants} className="mt-4 text-base text-muted-foreground sm:text-lg">
-                I am a Student, facinated about the Technologies Currently working on Wed Developent and Artificial Intelligence and Machine Learning 
-              </motion.p>
+          <motion.p variants={itemVariants} className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
+            I&apos;m Aryan — a first-year CS student at MIT ADT University who&apos;s more comfortable with a
+            soldering iron than a Figma file. I got into electronics in school, built my first robot in
+            Class 9, and since then I&apos;ve been hooked on making hardware do things. I&apos;m currently interning
+            at High Dynamics where I work on drone hardware. I use code as a tool — especially AI — but
+            my real interest is in the physical world: circuits, embedded systems, and anything that blinks,
+            moves, or beeps.
+          </motion.p>
 
-              <motion.div variants={itemVariants} className="mt-6 flex flex-wrap gap-4">
-                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn animated-border group flex items-center gap-2 px-6 py-2 text-sm font-semibold">
-                  <FaDownload className="transition-transform group-hover:scale-110" /> Resume
-                </a>
-                <Link href="/contact" className="btn group flex items-center gap-2 rounded-full border border-border px-6 py-2 text-sm font-semibold hover:border-primary hover:text-primary">
-                <FaEnvelope className="transition-transform group-hover:translate-x-1" /> Contact
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Decorative glass card with tech icons to the right */}
-            <motion.div variants={itemVariants} className="order-first md:order-last flex items-center justify-center">
-              <div className="glass w-56 rounded-xl p-6 text-center border border-border shadow-lg">
-                <div className="mb-3 text-sm font-medium text-muted-foreground">Core Technologies</div>
-                <div className="flex items-center justify-center gap-4">
-                  <div className="tech-icon bg-primary/10 rounded-full p-3">
-                    <SiNextdotjs className="text-xl text-white" />
-                  </div>
-                  <div className="tech-icon bg-primary/10 rounded-full p-3">
-                    <SiTypescript className="text-xl text-primary" />
-                  </div>
-                  <div className="tech-icon bg-primary/10 rounded-full p-3">
-                    <FaReact className="text-xl text-primary" />
-                  </div>
-                </div>
-                <div className="mt-4 text-xs text-muted-foreground">Fast. Thoughtful. Accessible.</div>
-              </div>
-            </motion.div>
-          </div>
-          {/* Futuristic stats strip */}
-          <motion.div variants={itemVariants} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="glass rounded-lg p-4 text-center border border-border">
-              <div className="text-3xl font-bold">5+</div>
-              <div className="text-sm text-muted-foreground">Time when started exploration</div>
-            </div>
-            <div className="glass rounded-lg p-4 text-center border border-border">
-              <div className="text-3xl font-bold">4+</div>
-              <div className="text-sm text-muted-foreground">Projects worked on</div>
-            </div>
-            <div className="glass rounded-lg p-4 text-center border border-border">
-              <div className="text-3xl font-bold">1</div>
-              <div className="text-sm text-muted-foreground">Open Source Contributions</div>
-            </div>
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-mono text-sm font-semibold"
+              >
+                Download Resume
+              </motion.button>
+            </a>
+            <Link href="/contact">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-6 py-2.5 rounded-xl border border-border font-mono text-sm font-semibold text-foreground hover:border-primary hover:text-primary transition-all"
+              >
+                Get In Touch
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Skills Section */}
+      {/* ===== SKILLS ===== */}
       <motion.section
-        className="bg-card/50 px-4 py-20 sm:px-6 lg:px-8"
+        className="px-6 py-20"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <div className="mx-auto max-w-7xl">
-          <motion.h2 variants={itemVariants} className="mb-12 text-center text-3xl font-bold sm:text-4xl">
-            My <span className="text-primary">Technical Toolkit</span>
+        <div className="mx-auto max-w-4xl">
+          <motion.h2 variants={itemVariants} className="mb-10 text-3xl font-heading font-bold">
+            My <span className="text-primary">Toolkit</span>
           </motion.h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {skills.map((skill) => (
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {skillCategories.map((category) => (
               <motion.div
-                key={skill.name}
+                key={category.title}
                 variants={itemVariants}
-                whileHover={{ y: -5, scale: 1.02 }}
-                className="glass cursor-pointer rounded-xl border border-border p-6 transition-colors hover:border-primary/50"
+                whileHover={{ y: -3 }}
+                className="rounded-xl border border-border bg-surface p-6 transition-all hover:border-primary/30"
               >
-                <div className="mb-4 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-2xl">
-                    {skill.icon}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    {category.icon}
                   </div>
-                  <span className="text-lg font-semibold">{skill.name}</span>
+                  <h3 className="font-heading font-bold text-lg">{category.title}</h3>
                 </div>
-                <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-primary to-accent"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-                  />
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1.5 rounded-lg bg-primary/5 text-sm font-mono text-muted-foreground border border-border"
+                    >
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </motion.div>
             ))}
@@ -163,43 +190,87 @@ export default function AboutPage() {
         </div>
       </motion.section>
 
-      {/* Experience & Education Timeline */}
+      {/* ===== TIMELINE ===== */}
       <motion.section
-        className="px-4 py-20 sm:px-6 lg:px-8"
+        className="px-6 py-20"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
         <div className="mx-auto max-w-3xl">
-          <motion.h2 variants={itemVariants} className="mb-12 text-center text-3xl font-bold sm:text-4xl">
+          <motion.h2 variants={itemVariants} className="mb-10 text-3xl font-heading font-bold">
             My <span className="text-primary">Journey</span>
           </motion.h2>
 
           <div className="relative border-l-2 border-primary/20">
-            {/* Experience Item */}
-            <TimelineItem
-              title="Senior Full-Stack Developer"
-              subtitle="Tech Solutions Inc. • 2022 - Present"
-              description="Led development of a SaaS platform using Next.js and TypeScript, improving performance by 40%. Mentored junior developers and established CI/CD pipelines."
-              icon={<FaNodeJs className="h-4 w-4 text-primary-foreground" />}
-            />
-            {/* Education Item */}
-            <TimelineItem
-              title="B.Tech in Computer Science"
-              subtitle="MIT ADT • 2025 - 2029 (Expected)"
-              description="Pursuing a B.Tech degree with a focus on AI and web technologies. Actively participating in hackathons and coding clubs, with a goal of contributing to open-source projects."
-              icon={<FaGraduationCap className="h-4 w-4 text-primary-foreground" />}
-            />
+            {timeline.map((item) => (
+              <TimelineItem key={item.title} {...item} />
+            ))}
           </div>
+        </div>
+      </motion.section>
+
+      {/* ===== INTERESTS ===== */}
+      <motion.section
+        className="px-6 py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={containerVariants}
+      >
+        <div className="mx-auto max-w-3xl">
+          <motion.h2 variants={itemVariants} className="mb-6 text-2xl font-heading font-bold">
+            Beyond <span className="text-primary">Code</span>
+          </motion.h2>
+          <div className="flex flex-wrap gap-3">
+            {interests.map((interest) => (
+              <motion.div
+                key={interest.label}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-sm font-mono text-muted-foreground hover:text-primary hover:border-primary/30 transition-all cursor-default"
+              >
+                <span className="text-primary">{interest.icon}</span>
+                {interest.label}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ===== CTA ===== */}
+      <motion.section
+        className="px-6 py-20"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="mx-auto max-w-2xl rounded-xl border border-border bg-surface p-8 text-center">
+          <h2 className="text-2xl font-heading font-bold mb-4">
+            Want to <span className="text-primary">collaborate</span>?
+          </h2>
+          <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+            If you&apos;re a student wanting to collaborate, a business with a hardware/IoT project,
+            or just someone building something cool — let&apos;s talk.
+          </p>
+          <Link href="/contact">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-foreground font-mono text-sm font-semibold"
+            >
+              Get In Touch <FaArrowRight className="text-xs" />
+            </motion.button>
+          </Link>
         </div>
       </motion.section>
     </div>
   );
 }
 
-// --- Helper Components ---
-
+// --- Timeline Item Component ---
 interface TimelineItemProps {
   title: string;
   subtitle: string;
@@ -209,45 +280,33 @@ interface TimelineItemProps {
 
 function TimelineItem({ title, subtitle, description, icon }: TimelineItemProps) {
   return (
-    <motion.div variants={itemVariants} className="relative mb-10 ml-8">
-      <span className="absolute -left-[41px] flex h-8 w-8 items-center justify-center rounded-full bg-primary ring-8 ring-background">
+    <motion.div variants={itemVariants} className="relative mb-8 ml-8">
+      <span className="absolute -left-[25px] flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground ring-4 ring-background text-xs">
         {icon}
       </span>
-      <div className="glass rounded-xl border border-border p-6 transition-colors duration-300 hover:border-accent/50">
-        <h3 className="mb-1 text-xl font-bold text-foreground">{title}</h3>
-        <p className="mb-3 text-sm font-normal leading-none text-muted-foreground">{subtitle}</p>
-        <p className="text-base font-normal text-muted-foreground">{description}</p>
+      <div className="rounded-xl border border-border bg-surface p-5 transition-all hover:border-primary/20 hover:shadow-md hover:shadow-primary/5">
+        <h3 className="text-lg font-heading font-bold">{title}</h3>
+        <p className="text-xs font-mono text-muted-foreground mb-2">{subtitle}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       </div>
     </motion.div>
   );
 }
 
-// A more accurate skeleton component
+// --- Skeleton ---
 function AboutPageSkeleton() {
   return (
-    <div className="container mx-auto animate-pulse px-4 py-24">
-      <div className="space-y-24">
-        {/* Hero Skeleton */}
-        <div className="mx-auto flex max-w-4xl flex-col items-center space-y-8">
-          <div className="h-16 w-3/4 rounded-lg bg-muted/50"></div>
-          <div className="h-8 w-full rounded-lg bg-muted/50"></div>
-          <div className="h-8 w-5/6 rounded-lg bg-muted/50"></div>
-          <div className="flex gap-6 pt-4">
-            <div className="h-12 w-44 rounded-full bg-primary/20"></div>
-            <div className="h-12 w-44 rounded-full bg-muted/50"></div>
-          </div>
+    <div className="container mx-auto animate-pulse px-6 py-24">
+      <div className="space-y-16 max-w-3xl mx-auto">
+        <div className="space-y-4">
+          <div className="h-12 w-3/4 rounded-lg bg-muted/50" />
+          <div className="h-6 w-full rounded-lg bg-muted/50" />
+          <div className="h-6 w-5/6 rounded-lg bg-muted/50" />
         </div>
-
-        {/* Skills Section Skeleton */}
-        <div>
-          <div className="mx-auto mb-12 h-10 w-1/3 rounded-lg bg-muted/50"></div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => <div key={i} className="h-32 rounded-xl bg-muted/50"></div>)}
-          </div>
+        <div className="grid grid-cols-2 gap-4">
+          {[...Array(4)].map((_, i) => <div key={i} className="h-40 rounded-xl bg-muted/50" />)}
         </div>
       </div>
-      <Footer />
     </div>
   );
-  
 }

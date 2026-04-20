@@ -18,6 +18,7 @@ frontend/next-env.d.ts
 
 # Sanity (Backend Build)
 /backend/dist/
+/backend/.next/
 .sanity/
 
 # Production

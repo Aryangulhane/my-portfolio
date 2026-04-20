@@ -7,45 +7,48 @@ module.exports = {
   ],
   theme: {
     extend: {
-      screens: {
-        'xs': '480px', // Extra small devices
-        '3xl': '1920px', // Ultra-wide screens
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        heading: ['Space Grotesk', 'JetBrains Mono', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
       },
-      spacing: {
-        '128': '32rem', // Custom large spacing
-        '144': '36rem',
+      screens: {
+        'xs': '480px',
+        '3xl': '1920px',
       },
       colors: {
-        border: '#2a2a2a',
+        border: 'var(--border)',
         background: {
-          DEFAULT: '#0a0a0a',
-          '50': 'rgba(10, 10, 10, 0.5)',
-          '70': 'rgba(10, 10, 10, 0.7)',
+          DEFAULT: 'var(--background)',
         },
-        foreground: '#ffffff',
-        primary: '#ffffff',
+        foreground: 'var(--foreground)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+        },
         accent: {
-          DEFAULT: '#ffffff',
-          '20': 'rgba(255, 255, 255, 0.2)',
-          '40': 'rgba(255, 255, 255, 0.4)',
-          foreground: '#000000',
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--accent-foreground)',
         },
         card: {
-          DEFAULT: '#111111',
-          foreground: '#ffffff',
+          DEFAULT: 'var(--card)',
+          foreground: 'var(--foreground)',
         },
-        popover: {
-          DEFAULT: '#111111',
-          foreground: '#ffffff',
+        secondary: {
+          DEFAULT: 'var(--secondary)',
         },
         muted: {
-          DEFAULT: '#2a2a2a',
-          foreground: '#a1a1aa',
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
         },
         destructive: {
-          DEFAULT: '#ef4444',
+          DEFAULT: 'var(--destructive)',
           foreground: '#ffffff',
         },
+        success: {
+          DEFAULT: 'var(--success)',
+        },
+        surface: 'var(--surface)',
       },
       borderRadius: {
         DEFAULT: '0.5rem',

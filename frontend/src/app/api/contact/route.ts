@@ -2,10 +2,15 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
   try {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error('RESEND_API_KEY is not configured');
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+    }
+
+    const resend = new Resend(apiKey);
     const { name, email, message } = await request.json();
 
     if (!name || !email || !message) {
@@ -13,11 +18,10 @@ export async function POST(request: Request) {
     }
 
     const data = await resend.emails.send({
-      from: 'Aryan Portfolio <onboarding@resend.dev>', // Replace with verified domain later
-      to: process.env.EMAIL_RECIPIENT!,
+      from: 'Aryan Portfolio <onboarding@resend.dev>',
+      to: process.env.EMAIL_RECIPIENT || 'aryangulhane6@gmail.com',
       subject: `New Contact: ${name}`,
       replyTo: email,
-
       html: `
         <h2>New Contact Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
@@ -31,8 +35,9 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, message: 'Email sent successfully!' });
-  } catch (error: any) {
-    console.error('Resend error:', error.message);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Resend error:', errorMessage);
     return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
   }
 }
