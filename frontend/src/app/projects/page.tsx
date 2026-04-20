@@ -7,44 +7,66 @@ import Link from 'next/link';
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 // --- Real Project Data ---
-const projects = [
+interface ProjectFiles {
+  schematic?: string;
+  code?: string;
+  bom?: string;
+}
+
+interface Project {
+  title: string;
+  tags: string[];
+  description: string;
+  status: 'Completed' | 'In Progress';
+  context?: string;
+  repo?: string;
+  files?: ProjectFiles;
+}
+
+const projects: Project[] = [
   {
     title: '4-Channel Home Automation System',
     tags: ['Hardware', 'Automation', 'IoT'],
     description: 'Built in Class 10. Controls 4 home appliances remotely using ESP32 with both Rainmaker and Blynk IoT platforms. Includes relay switching and smartphone control.',
-    status: 'Completed' as const,
+    status: 'Completed',
     repo: 'https://github.com/Aryangulhane',
+    files: {
+      code: 'https://github.com/Aryangulhane',
+    },
   },
   {
     title: 'Obstacle Avoiding Robot',
     tags: ['Hardware', 'Robotics', 'Embedded'],
     description: 'Built in Class 9. Autonomous robot using ultrasonic sensors and Arduino to detect and avoid obstacles in real time.',
-    status: 'Completed' as const,
+    status: 'Completed',
   },
   {
     title: 'ESP32 Data Logger via Web Server',
     tags: ['Hardware', 'IoT', 'Embedded'],
     description: 'Logs sensor data to a local web server hosted on the ESP32 itself. Accessible from any browser on the same network — no cloud required.',
-    status: 'Completed' as const,
+    status: 'Completed',
+    files: {
+      code: 'https://github.com/Aryangulhane',
+    },
   },
   {
     title: 'Bluetooth Relay Controller',
     tags: ['Hardware', 'Embedded', 'IoT'],
     description: 'Bluetooth serial communication between ESP32 and a mobile device to toggle relays on/off. Simple, fast, wireless control over hardware.',
-    status: 'Completed' as const,
+    status: 'Completed',
   },
   {
     title: '3S 12V LiPo Battery Pack for Drone',
     tags: ['Hardware', 'Drone'],
     description: 'Built during internship at High Dynamics. A 3-cell 12V LiPo pack with connectors, assembled for drone power systems.',
-    status: 'Completed' as const,
+    status: 'Completed',
     context: 'High Dynamics Internship',
   },
   {
     title: 'Power Distribution Board (PDB)',
     tags: ['Hardware', 'Drone', 'Electronics'],
     description: 'Currently designing and building a custom PDB for drone systems at High Dynamics. Handles power routing from battery to ESCs and other drone components.',
-    status: 'In Progress' as const,
+    status: 'In Progress',
     context: 'High Dynamics Internship',
   },
 ];
@@ -159,15 +181,6 @@ export default function ProjectsPage() {
 }
 
 // --- Project Card ---
-interface Project {
-  title: string;
-  tags: string[];
-  description: string;
-  status: 'Completed' | 'In Progress';
-  context?: string;
-  repo?: string;
-}
-
 const ProjectCard = ({ project }: { project: Project }) => (
   <motion.div
     layout
@@ -210,8 +223,32 @@ const ProjectCard = ({ project }: { project: Project }) => (
       ))}
     </div>
 
-    {/* Action */}
-    {project.repo && (
+    {/* Open Project Files */}
+    {project.files && (
+      <div className="mt-auto pt-4 border-t border-border/50 flex flex-wrap gap-2">
+        {project.files.schematic && (
+          <a href={project.files.schematic} target="_blank" rel="noopener noreferrer"
+            className="text-xs px-3 py-1.5 rounded-lg border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors font-mono inline-flex items-center gap-1.5">
+            📐 Schematic
+          </a>
+        )}
+        {project.files.code && (
+          <a href={project.files.code} target="_blank" rel="noopener noreferrer"
+            className="text-xs px-3 py-1.5 rounded-lg border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors font-mono inline-flex items-center gap-1.5">
+            💾 Code
+          </a>
+        )}
+        {project.files.bom && (
+          <a href={project.files.bom} target="_blank" rel="noopener noreferrer"
+            className="text-xs px-3 py-1.5 rounded-lg border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors font-mono inline-flex items-center gap-1.5">
+            🧾 Parts list
+          </a>
+        )}
+      </div>
+    )}
+
+    {/* GitHub Link (fallback when no files) */}
+    {!project.files && project.repo && (
       <div className="mt-auto pt-4 border-t border-border">
         <a
           href={project.repo}

@@ -1,3 +1,4 @@
+import { buildLogType } from './buildLogType'
 
 export const schema = {
   types: [
@@ -88,6 +89,8 @@ export const schema = {
           title: 'Description'
         }
       ]
-    }
+    },
+    // Build Log schema for the Lab page
+    buildLogType,
   ]
 }

@@ -11,22 +11,32 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
-    const { name, email, message } = await request.json();
+    const { name, email, message, mode, project, budget } = await request.json();
 
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    if (!name || !email) {
+      return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
     }
+
+    // Dynamic subject based on contact mode
+    const subjectMap: Record<string, string> = {
+      student: `[Student collab] from ${name}`,
+      business: `[Business enquiry] from ${name}`,
+    };
+    const subject = subjectMap[mode] || `[Contact] from ${name}`;
 
     const data = await resend.emails.send({
       from: 'Aryan Portfolio <onboarding@resend.dev>',
       to: process.env.EMAIL_RECIPIENT || 'aryangulhane6@gmail.com',
-      subject: `New Contact: ${name}`,
+      subject,
       replyTo: email,
       html: `
-        <h2>New Contact Submission</h2>
+        <h2>${subject}</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong><br/>${message.replace(/\n/g, "<br/>")}</p>
+        <p><strong>Mode:</strong> ${mode || 'general'}</p>
+        ${project ? `<p><strong>Project:</strong> ${project}</p>` : ''}
+        ${budget ? `<p><strong>Budget / Timeline:</strong> ${budget}</p>` : ''}
+        ${message ? `<p><strong>Message:</strong><br/>${message.replace(/\n/g, "<br/>")}</p>` : ''}
       `,
     });
 

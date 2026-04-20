@@ -6,6 +6,7 @@ import { TypeAnimation } from 'react-type-animation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BackgroundScene } from '@/components/BackgroundScene';
+import { GitHubFeed } from '@/components/GitHubFeed';
 import { FaBolt, FaMicrochip, FaRobot, FaWifi, FaCamera, FaMusic, FaAtom, FaFilm, FaGithub, FaArrowRight } from 'react-icons/fa';
 
 // --- Real Projects Data ---
@@ -346,6 +347,25 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </section>
+
+        {/* --- GitHub Activity Feed --- */}
+        <section className="container mx-auto px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
+            className="max-w-3xl"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl font-heading font-bold mb-6"
+            >
+              <span className="gradient-text font-mono">$ git log --oneline</span>
+            </motion.h2>
+            <GitHubFeed />
           </motion.div>
         </section>
 

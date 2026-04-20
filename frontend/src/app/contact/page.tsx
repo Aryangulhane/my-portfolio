@@ -1,7 +1,7 @@
 // src/app/contact/page.tsx
 "use client";
 
-import { useState, ChangeEvent, FormEvent, FC, ReactNode, useRef, MouseEvent, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, FC, ReactNode, useRef, MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaEnvelope,
@@ -12,6 +12,8 @@ import {
   FaArrowRight,
   FaPaperPlane,
   FaMapMarkerAlt,
+  FaUserGraduate,
+  FaBriefcase,
 } from "react-icons/fa";
 import { FiLoader, FiCheckCircle, FiAlertTriangle, FiUser, FiMessageSquare } from "react-icons/fi";
 
@@ -31,6 +33,8 @@ const itemVariants = {
     transition: { duration: 0.5, ease: "easeOut" },
   },
 };
+
+type ContactMode = "student" | "business" | null;
 
 // --- Main Page ---
 export default function ContactPage() {
@@ -60,7 +64,7 @@ export default function ContactPage() {
               animate={{ opacity: [1, 0.5, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            Available for Projects
+            Open for Collaboration
           </motion.div>
           <motion.h1
             variants={itemVariants}
@@ -72,8 +76,7 @@ export default function ContactPage() {
             variants={itemVariants}
             className="max-w-xl text-lg text-muted-foreground"
           >
-            Whether you&apos;re a student with an idea, a business with a hardware project,
-            or someone who just wants to geek out about circuits — my inbox is open.
+            Student with an idea, or a business with a hardware/IoT project? Pick your path.
           </motion.p>
         </motion.div>
 
@@ -126,18 +129,18 @@ export default function ContactPage() {
 
               <ContactLink
                 icon={<FaMapMarkerAlt />}
-                text="Loni Kalbhor, Pune, Maharashtra, India"
+                text="Loni Kalbhor, Pune, India"
               />
             </motion.div>
 
-            {/* Quick info */}
+            {/* What I work on */}
             <motion.div
               variants={itemVariants}
               className="rounded-xl border border-border bg-surface p-5"
             >
               <h3 className="font-heading font-semibold text-sm mb-3">What I work on</h3>
               <div className="flex flex-wrap gap-2">
-                {['Hardware Projects', 'IoT Systems', 'Embedded Firmware', 'Drone Electronics', 'Automation'].map((item) => (
+                {['Hardware Projects', 'IoT Systems', 'Embedded Firmware', 'Drone Electronics', 'PCB Design', 'Automation'].map((item) => (
                   <span
                     key={item}
                     className="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-xs font-mono border border-primary/15"
@@ -210,9 +213,10 @@ const ContactLink = ({ icon, text, href }: { icon: ReactNode; text: string; href
   );
 };
 
-// --- Contact Form ---
+// --- Contact Form with Mode Selector ---
 const ContactForm = () => {
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [mode, setMode] = useState<ContactMode>(null);
+  const [formState, setFormState] = useState({ name: "", email: "", message: "", project: "", budget: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
@@ -238,7 +242,7 @@ const ContactForm = () => {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formState),
+        body: JSON.stringify({ ...formState, mode }),
       });
 
       if (!response.ok) {
@@ -248,7 +252,7 @@ const ContactForm = () => {
 
       setStatus("success");
       setFeedbackMessage("Message received! I'll get back to you soon.");
-      setFormState({ name: "", email: "", message: "" });
+      setFormState({ name: "", email: "", message: "", project: "", budget: "" });
     } catch (error) {
       setStatus("error");
       setFeedbackMessage(error instanceof Error ? error.message : "Failed to send message.");
@@ -286,10 +290,10 @@ const ContactForm = () => {
             >
               <FiCheckCircle className="text-5xl text-green-500 mb-4" />
             </motion.div>
-            <h3 className="text-2xl font-heading font-bold mb-2">Message Sent!</h3>
+            <h3 className="text-2xl font-heading font-bold mb-2">Got it.</h3>
             <p className="text-muted-foreground mb-6">{feedbackMessage}</p>
             <motion.button
-              onClick={() => setStatus("idle")}
+              onClick={() => { setStatus("idle"); setMode(null); }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="rounded-xl bg-primary px-6 py-2.5 font-mono text-sm font-semibold text-primary-foreground"
@@ -305,81 +309,155 @@ const ContactForm = () => {
             exit={{ opacity: 0 }}
             className="relative z-10 space-y-5"
           >
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <FaPaperPlane />
               </div>
               <div>
                 <h3 className="text-xl font-heading font-bold">Send a message</h3>
-                <p className="text-xs text-muted-foreground">I&apos;ll get back to you within 24 hours</p>
+                <p className="text-xs text-muted-foreground">Pick your path, then tell me what&apos;s up</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FormField
-                id="name"
-                label="Your Name"
-                type="text"
-                value={formState.name}
-                onChange={handleChange}
-                icon={<FiUser />}
-                required
-              />
-              <FormField
-                id="email"
-                label="Your Email"
-                type="email"
-                value={formState.email}
-                onChange={handleChange}
-                icon={<FaEnvelope />}
-                required
-              />
+            {/* Mode selector */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setMode("student")}
+                className={`rounded-xl border p-4 text-left transition-all ${
+                  mode === "student"
+                    ? "border-primary bg-primary/10 shadow-sm shadow-primary/10"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <FaUserGraduate className={`mb-2 ${mode === "student" ? "text-primary" : "text-muted-foreground"}`} size={20} />
+                <p className="font-heading font-semibold text-sm">Student / Maker</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Collab, learn, build together</p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("business")}
+                className={`rounded-xl border p-4 text-left transition-all ${
+                  mode === "business"
+                    ? "border-primary bg-primary/10 shadow-sm shadow-primary/10"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <FaBriefcase className={`mb-2 ${mode === "business" ? "text-primary" : "text-muted-foreground"}`} size={20} />
+                <p className="font-heading font-semibold text-sm">Business / Client</p>
+                <p className="text-xs text-muted-foreground mt-0.5">IoT project, hardware consult</p>
+              </button>
             </div>
 
-            <FormField
-              id="message"
-              label="What are you working on?"
-              type="textarea"
-              value={formState.message}
-              onChange={handleChange}
-              icon={<FiMessageSquare />}
-              required
-              rows={5}
-            />
-
+            {/* Form fields — appear after mode selection */}
             <AnimatePresence>
-              {status === "error" && (
+              {mode && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4 overflow-hidden"
                 >
-                  <FiAlertTriangle />
-                  {feedbackMessage}
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <FormField
+                      id="name"
+                      label="Your Name"
+                      type="text"
+                      value={formState.name}
+                      onChange={handleChange}
+                      icon={<FiUser />}
+                      required
+                    />
+                    <FormField
+                      id="email"
+                      label="Your Email"
+                      type="email"
+                      value={formState.email}
+                      onChange={handleChange}
+                      icon={<FaEnvelope />}
+                      required
+                    />
+                  </div>
+
+                  {mode === "student" && (
+                    <FormField
+                      id="project"
+                      label="What are you building or want to work on?"
+                      type="textarea"
+                      value={formState.project}
+                      onChange={handleChange}
+                      icon={<FiMessageSquare />}
+                      rows={3}
+                    />
+                  )}
+
+                  {mode === "business" && (
+                    <>
+                      <FormField
+                        id="project"
+                        label="Describe your project or what you need"
+                        type="textarea"
+                        value={formState.project}
+                        onChange={handleChange}
+                        icon={<FiMessageSquare />}
+                        rows={3}
+                      />
+                      <FormField
+                        id="budget"
+                        label="Rough budget / timeline (optional)"
+                        type="text"
+                        value={formState.budget}
+                        onChange={handleChange}
+                      />
+                    </>
+                  )}
+
+                  <FormField
+                    id="message"
+                    label="Anything else you want to say"
+                    type="textarea"
+                    value={formState.message}
+                    onChange={handleChange}
+                    rows={3}
+                  />
+
+                  <AnimatePresence>
+                    {status === "error" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
+                      >
+                        <FiAlertTriangle />
+                        {feedbackMessage}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <motion.button
+                    type="submit"
+                    disabled={status === "submitting" || !formState.name || !formState.email}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 font-mono text-sm font-semibold text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {status === "submitting" ? (
+                      <>
+                        <FiLoader className="animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        $ Send Message
+                        <FaArrowRight className="text-xs" />
+                      </>
+                    )}
+                  </motion.button>
                 </motion.div>
               )}
             </AnimatePresence>
-
-            <motion.button
-              type="submit"
-              disabled={status === "submitting"}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 font-mono text-sm font-semibold text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {status === "submitting" ? (
-                <>
-                  <FiLoader className="animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  Send Message
-                  <FaArrowRight className="text-xs" />
-                </>
-              )}
-            </motion.button>
           </motion.form>
         )}
       </AnimatePresence>

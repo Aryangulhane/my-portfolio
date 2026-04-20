@@ -8,6 +8,7 @@ import { FaGithub, FaLinkedin, FaTwitter, FaArrowUp, FaInstagram } from "react-i
 const navItems = [
   { name: 'Projects', path: '/projects' },
   { name: 'Lab', path: '/lab' },
+  { name: 'Tools', path: '/tools' },
   { name: 'About', path: '/about' },
   { name: 'Blog', path: '/blog' },
   { name: 'Contact', path: '/contact' },
